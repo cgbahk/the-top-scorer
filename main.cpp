@@ -178,13 +178,13 @@ void test()
 {
   // RngdSum test
   {
-    RngdSum cb;
+    RngdSum cb3(3);
+    assert(cb3.calc(2, 6) == 1);
+    assert(cb3.calc(5, 14) == 5);
 
-    assert(cb.calc(2, 3, 6) == 1);
-    assert(cb.calc(2, 4, 6) == 3);
-    assert(cb.calc(3, 5, 15) == 1);
-    assert(cb.calc(3, 5, 14) == 3);
-    assert(cb.calc(5, 3, 14) == 5);
+    RngdSum cb5(5);
+    assert(cb5.calc(3, 15) == 1);
+    assert(cb5.calc(3, 14) == 3);
   }
   
   // Mod test
