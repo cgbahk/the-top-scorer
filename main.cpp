@@ -40,6 +40,17 @@ struct RngdSum
       return 0;
     }
 
+    if(sum < 0)
+    {
+      return 0;
+    }
+
+    if(sum == 0)
+    {
+      _memo[len][sum] = 1;
+      return 1;
+    }
+
     if(len == 1)
     {
       if(_rng >= sum)
@@ -54,24 +65,9 @@ struct RngdSum
       }
     }
 
-    if(sum < 0)
-    {
-      _memo[len][sum] = 0;
-      return 0;
-    }
-
-    if(sum == 0)
-    {
-      _memo[len][sum] = 1;
-      return 1;
-    }
-
-    int val = 0;
-    // TODO this method has faster implementation by delete overlap
-    for(int k=0; k<=_rng && sum-k>=0; k++)
-    {
-      val += calc(len-1, sum-k);
-    }
+    int val = calc( len, sum-1 )
+            + calc( len-1, sum )
+            - calc( len-1, sum-_rng-1 );
     _memo[len][sum] = val;
     return val;
   }
@@ -175,6 +171,12 @@ void test()
   // RngdSum test
   {
     RngdSum cb3(3);
+    assert(cb3.calc(1, 0) == 1);
+    assert(cb3.calc(1, 1) == 1);
+    assert(cb3.calc(2, 0) == 1);
+    assert(cb3.calc(2, 1) == 2);
+    assert(cb3.calc(3, 0) == 1);
+    assert(cb3.calc(3, 1) == 3);
     assert(cb3.calc(2, 6) == 1);
     assert(cb3.calc(5, 14) == 5);
 
@@ -244,8 +246,8 @@ int main()
 //  freopen("input.txt", "r", stdin);
 #endif
 
-  //test();
-  prob();
+  test();
+  //prob();
 
   return 0;
 }
