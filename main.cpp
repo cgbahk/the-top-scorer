@@ -7,6 +7,8 @@ using namespace std;
 const static int PL = 100, S = 5000;
 const static int P = 998244353;
 
+int invmemo[PL+1];
+
 /// class for Modulo P operation
 struct Mod
 {
@@ -62,10 +64,20 @@ struct Mod
   }
 
 private:
-  // TODO memo inverse
   Mod inverse(Mod arg)
   {
     assert( arg.val() != 0 );
+
+    if(arg.val() <= 100)
+    {
+      if(invmemo[arg.val()] != 0)
+      {
+        return Mod(invmemo[arg.val()]);
+      }
+      Mod inv = power(arg, P-2);
+      invmemo[arg.val()] = inv.val();
+      return inv;
+    }
     return power(arg, P-2);
   }
 
@@ -107,13 +119,17 @@ struct RngdSum
    * Returns # of possible RngdSumnations of a[] hold following:
    * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
    *
-   * TODO calc(len, sum) = calc(len, len*_rng - sum)
    */
   Mod calc(int len, int sum)
   {
     if(!(_memo[len][sum] == P-1))
     {
       return _memo[len][sum];
+    }
+
+    if(2*sum > len * _rng)
+    {
+      return calc(len, len * _rng - sum);
     }
 
     if(len * _rng < sum)
