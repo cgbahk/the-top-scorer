@@ -68,6 +68,7 @@ private:
   {
     assert( arg.val() != 0 );
 
+    // TODO may remove invmemo, as it is not very effective
     if(arg.val() <= 100)
     {
       if(invmemo[arg.val()] != 0)
@@ -119,6 +120,7 @@ struct RngdSum
    * Returns # of possible RngdSumnations of a[] hold following:
    * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
    *
+   * TODO faster log n dp
    */
   Mod calc(int len, int sum)
   {
@@ -269,8 +271,8 @@ int main()
 //  freopen("input.txt", "r", stdin);
 #endif
 
-  //test();
-  prob();
+  test();
+  //prob();
 
   return 0;
 }
