@@ -54,7 +54,6 @@ struct RngdSum
       }
     }
 
-    // TODO may remove, as may redundant
     if(sum < 0)
     {
       _memo[len][sum] = 0;
