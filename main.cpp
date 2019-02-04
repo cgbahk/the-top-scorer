@@ -9,7 +9,7 @@ const static int P = 998244353;
 
 int invmemo[PL+1];
 
-/// class for Modulo P operation
+// class for Modulo P operation
 struct Mod
 {
   Mod()
@@ -101,7 +101,7 @@ private:
 
 struct RngdSum
 {
-  /// Initialize memo to -1, i.e. not visited(calculated)
+  // Initialize memo to -1, i.e. not visited(calculated)
   RngdSum(int rng) : _rng(rng)
   {
     for (int len=0; len<PL; len++)
@@ -175,7 +175,7 @@ private:
   int _rng;
 };
 
-/// calculate (n choose k) in Mod
+// calculate (n choose k) in Mod
 Mod combi(int n, int k)
 {
   if(n < 2*k){ return combi(n, n-k); }
