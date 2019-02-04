@@ -213,21 +213,30 @@ void test()
 
 void prob()
 {
-  do
+  int p, s, r;
+  cin >> p >> s >> r;
+
+  Mod num(0), den(0);
+
+  // numerator
+  for(int k=0; k<=s-r; k++)
   {
-    int p, s, r;
-    cin >> p >> s >> r;
-    if( p < 0 ){ break; }
-    
-    // solve problem
-    Mod num(0), den(0);
-    for(int k=0; k<=s-r; k++)
+    RngdSum rs(r+k-1);
+    for (int l=1; l<=p && s-(r+k)*l >= 0; l++) // decrease p to valid one for better performance
     {
-      RngdSum rs(r+k-1);
+      Mod temp(1);
+      temp = temp * Mod( rs.calc( p-l, s-(r+k)*l ) );
+      temp = temp * combi(p-1, l-1);
+      temp = temp / Mod(l);
 
+      num = num + temp;
     }
+  }
 
-  } while(1);
+  // denominator
+  den = den + combi(p+s-r-1, p-1);
+
+  cout << ( num / den ).val() << endl;
 }
 
 int main()
@@ -236,8 +245,8 @@ int main()
 //  freopen("input.txt", "r", stdin);
 #endif
 
-  test();
-  //prob();
+  //test();
+  prob();
 
   return 0;
 }
