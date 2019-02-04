@@ -187,10 +187,6 @@ void test()
     RngdSum cb5(5);
     assert(cb5.calc(3, 15) == 1);
     assert(cb5.calc(3, 14) == 3);
-
-    RngdSum cb(1000);
-    cout << cb.calc(10, 100).val() << endl;
-    cout << cb.calc(11, 100).val() << endl;
   }
   
   // Mod test
@@ -231,10 +227,10 @@ void prob()
   for(int k=0; k<=s-r; k++)
   {
     RngdSum rs(r+k-1);
-    for (int l=1; l<=p && s-(r+k)*l >= 0; l++) // decrease p to valid one for better performance
+    for (int l=1; l<=p && s-(r+k)*l >= 0; l++)
     {
       Mod temp(1);
-      temp = temp * Mod( rs.calc( p-l, s-(r+k)*l ) );
+      temp = temp * rs.calc( p-l, s-(r+k)*l );
       temp = temp * combi(p-1, l-1);
       temp = temp / Mod(l);
 
@@ -254,8 +250,8 @@ int main()
 //  freopen("input.txt", "r", stdin);
 #endif
 
-  test();
-  //prob();
+  //test();
+  prob();
 
   return 0;
 }
