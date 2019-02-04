@@ -120,7 +120,7 @@ struct RngdSum
    * Returns # of possible RngdSumnations of a[] hold following:
    * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
    *
-   * TODO faster log n dp
+   * TODO faster log n dp - this seems (much) slower
    */
   Mod calc(int len, int sum)
   {
@@ -191,6 +191,26 @@ Mod combi(int n, int k)
   return ret;
 }
 
+Mod calc(int len, int rng, int sum)
+{
+  Mod ret(0);
+  for(int i=0; i<=len; i++)
+  {
+    Mod temp(1);
+    temp = temp * combi(len, i);
+    temp = temp * combi(len + sum - i * (rng+1) - 1, len - 1);
+    if(i % 2)
+    {
+      ret = ret - temp;
+    }
+    else
+    {
+      ret = ret + temp;
+    }
+  }
+  return ret;
+}
+
 void test()
 {
   // RngdSum test
@@ -208,6 +228,9 @@ void test()
     RngdSum cb5(5);
     assert(cb5.calc(3, 15) == 1);
     assert(cb5.calc(3, 14) == 3);
+
+    RngdSum cb(2000);
+    assert(cb.calc(100, 5000) == 104171511);
   }
   
   // Mod test
@@ -233,6 +256,12 @@ void test()
     assert( combi(6, 3) == 20 );
     assert( combi(6, 4) == 15 );
     combi(5000, 2500); // for speed concern
+  }
+
+  // calc test
+  {
+    assert( calc(3, 5, 14) == 3 );
+    assert( calc(5, 3, 14) == 5 );
   }
   cout << "Test passed" << endl;
 }
