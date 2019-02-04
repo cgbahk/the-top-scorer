@@ -10,6 +10,10 @@ const static int P = 998244353;
 /// class for Modulo P operation
 struct Mod
 {
+  Mod()
+  {
+    // Do nothing
+  }
   Mod(int val)
   {
     _val = val % P;
@@ -82,7 +86,6 @@ private:
   int _val;
 };
 
-// TODO change base of RngdSum type from int to Mod
 struct RngdSum
 {
   /// Initialize memo to -1, i.e. not visited(calculated)
@@ -92,7 +95,7 @@ struct RngdSum
     {
       for (int sum=0; sum<S; sum++)
       {
-        _memo[len][sum] = -1;
+        _memo[len][sum] = Mod(P-1); // TODO is this safe?
       }
     }
   }
@@ -103,16 +106,16 @@ struct RngdSum
    * Returns # of possible RngdSumnations of a[] hold following:
    * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
    */
-  int calc(int len, int sum)
+  Mod calc(int len, int sum)
   {
-    if(_memo[len][sum] != -1)
+    if(!(_memo[len][sum] == P-1))
     {
       return _memo[len][sum];
     }
 
     if(len * _rng < sum)
     {
-      _memo[len][sum] = 0;
+      _memo[len][sum] = Mod(0);
       return 0;
     }
 
@@ -123,7 +126,7 @@ struct RngdSum
 
     if(sum == 0)
     {
-      _memo[len][sum] = 1;
+      _memo[len][sum] = Mod(1);
       return 1;
     }
 
@@ -131,17 +134,17 @@ struct RngdSum
     {
       if(_rng >= sum)
       {
-        _memo[len][sum] = 1;
+        _memo[len][sum] = Mod(1);
         return 1;
       }
       else
       {
-        _memo[len][sum] = 0;
+        _memo[len][sum] = Mod(0);
         return 0;
       }
     }
 
-    int val = calc( len, sum-1 )
+    Mod val = calc( len, sum-1 )
             + calc( len-1, sum )
             - calc( len-1, sum-_rng-1 );
     _memo[len][sum] = val;
@@ -149,7 +152,7 @@ struct RngdSum
   }
 
 private:
-  int _memo[PL][S];
+  Mod _memo[PL][S];
   int _rng;
 };
 
@@ -186,8 +189,8 @@ void test()
     assert(cb5.calc(3, 14) == 3);
 
     RngdSum cb(1000);
-    cout << cb.calc(10, 100) << endl;
-    cout << cb.calc(11, 100) << endl;
+    cout << cb.calc(10, 100).val() << endl;
+    cout << cb.calc(11, 100).val() << endl;
   }
   
   // Mod test
