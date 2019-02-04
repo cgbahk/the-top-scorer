@@ -62,6 +62,7 @@ struct Mod
   }
 
 private:
+  // TODO memo inverse
   Mod inverse(Mod arg)
   {
     assert( arg.val() != 0 );
@@ -105,6 +106,8 @@ struct RngdSum
    *
    * Returns # of possible RngdSumnations of a[] hold following:
    * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
+   *
+   * TODO calc(len, sum) = calc(len, len*_rng - sum)
    */
   Mod calc(int len, int sum)
   {
