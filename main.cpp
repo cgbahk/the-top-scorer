@@ -7,76 +7,6 @@ using namespace std;
 const static int PL = 100, S = 5000;
 const static int P = 998244353;
 
-struct RngdSum
-{
-  /// Initialize memo to -1, i.e. not visited(calculated)
-  RngdSum(int rng) : _rng(rng)
-  {
-    for (int len=0; len<PL; len++)
-    {
-      for (int sum=0; sum<S; sum++)
-      {
-        _memo[len][sum] = -1;
-      }
-    }
-  }
-
-  /**
-   * calculate # of combination of sum of ranged integers
-   * 
-   * Returns # of possible RngdSumnations of a[] hold following:
-   * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
-   */
-  int calc(int len, int sum)
-  {
-    if(_memo[len][sum] != -1)
-    {
-      return _memo[len][sum];
-    }
-
-    if(len * _rng < sum)
-    {
-      _memo[len][sum] = 0;
-      return 0;
-    }
-
-    if(sum < 0)
-    {
-      return 0;
-    }
-
-    if(sum == 0)
-    {
-      _memo[len][sum] = 1;
-      return 1;
-    }
-
-    if(len == 1)
-    {
-      if(_rng >= sum)
-      {
-        _memo[len][sum] = 1;
-        return 1;
-      }
-      else
-      {
-        _memo[len][sum] = 0;
-        return 0;
-      }
-    }
-
-    int val = calc( len, sum-1 )
-            + calc( len-1, sum )
-            - calc( len-1, sum-_rng-1 );
-    _memo[len][sum] = val;
-    return val;
-  }
-
-private:
-  int _memo[PL][S];
-  int _rng;
-};
-
 /// class for Modulo P operation
 struct Mod
 {
@@ -152,6 +82,76 @@ private:
   int _val;
 };
 
+struct RngdSum
+{
+  /// Initialize memo to -1, i.e. not visited(calculated)
+  RngdSum(int rng) : _rng(rng)
+  {
+    for (int len=0; len<PL; len++)
+    {
+      for (int sum=0; sum<S; sum++)
+      {
+        _memo[len][sum] = -1;
+      }
+    }
+  }
+
+  /**
+   * calculate # of combination of sum of ranged integers
+   *
+   * Returns # of possible RngdSumnations of a[] hold following:
+   * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
+   */
+  int calc(int len, int sum)
+  {
+    if(_memo[len][sum] != -1)
+    {
+      return _memo[len][sum];
+    }
+
+    if(len * _rng < sum)
+    {
+      _memo[len][sum] = 0;
+      return 0;
+    }
+
+    if(sum < 0)
+    {
+      return 0;
+    }
+
+    if(sum == 0)
+    {
+      _memo[len][sum] = 1;
+      return 1;
+    }
+
+    if(len == 1)
+    {
+      if(_rng >= sum)
+      {
+        _memo[len][sum] = 1;
+        return 1;
+      }
+      else
+      {
+        _memo[len][sum] = 0;
+        return 0;
+      }
+    }
+
+    int val = calc( len, sum-1 )
+            + calc( len-1, sum )
+            - calc( len-1, sum-_rng-1 );
+    _memo[len][sum] = val;
+    return val;
+  }
+
+private:
+  int _memo[PL][S];
+  int _rng;
+};
+
 /// calculate (n choose k) in Mod
 Mod combi(int n, int k)
 {
@@ -183,6 +183,10 @@ void test()
     RngdSum cb5(5);
     assert(cb5.calc(3, 15) == 1);
     assert(cb5.calc(3, 14) == 3);
+
+    RngdSum cb(1000);
+    cout << cb.calc(10, 100) << endl;
+    cout << cb.calc(11, 100) << endl;
   }
   
   // Mod test
