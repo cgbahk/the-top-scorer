@@ -4,23 +4,19 @@
 typedef long long ll;
 using namespace std;
 
-const static int PL = 100, S = 50;
+const static int PL = 100, S = 5000;
 const static int P = 998244353;
 
 struct RngdSum
 {
   /// Initialize memo to -1, i.e. not visited(calculated)
-  // TODO delete rng and make 2D dp
-  RngdSum()
+  RngdSum(int rng) : _rng(rng)
   {
     for (int len=0; len<PL; len++)
     {
-      for (int rng=0; rng<S; rng++)
+      for (int sum=0; sum<S; sum++)
       {
-        for (int sum=0; sum<S; sum++)
-        {
-          _memo[len][rng][sum] = -1;
-        }
+        _memo[len][sum] = -1;
       }
     }
   }
@@ -29,31 +25,31 @@ struct RngdSum
    * calculate # of combination of sum of ranged integers
    * 
    * Returns # of possible RngdSumnations of a[] hold following:
-   * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, rng]
+   * a[1] + a[2] + ... + a[len] = sum where a[i] in [0, _rng]
    */
-  int calc(int len, int rng, int sum)
+  int calc(int len, int sum)
   {
-    if(_memo[len][rng][sum] != -1)
+    if(_memo[len][sum] != -1)
     {
-      return _memo[len][rng][sum];
+      return _memo[len][sum];
     }
 
-    if(len * rng < sum)
+    if(len * _rng < sum)
     {
-      _memo[len][rng][sum] = 0;
+      _memo[len][sum] = 0;
       return 0;
     }
 
     if(len == 1)
     {
-      if(rng >= sum)
+      if(_rng >= sum)
       {
-        _memo[len][rng][sum] = 1;
+        _memo[len][sum] = 1;
         return 1;
       }
       else
       {
-        _memo[len][rng][sum] = 0;
+        _memo[len][sum] = 0;
         return 0;
       }
     }
@@ -61,28 +57,29 @@ struct RngdSum
     // TODO may remove, as may redundant
     if(sum < 0)
     {
-      _memo[len][rng][sum] = 0;
+      _memo[len][sum] = 0;
       return 0;
     }
 
     if(sum == 0)
     {
-      _memo[len][rng][sum] = 1;
+      _memo[len][sum] = 1;
       return 1;
     }
 
     int val = 0;
     // this method has faster implementation by delete overlap
-    for(int k=0; k<=rng && sum-k>=0; k++)
+    for(int k=0; k<=_rng && sum-k>=0; k++)
     {
-      val += calc(len-1, rng, sum-k);
+      val += calc(len-1, sum-k);
     }
-    _memo[len][rng][sum] = val;
+    _memo[len][sum] = val;
     return val;
   }
 
 private:
-  int _memo[PL][S][S];
+  int _memo[PL][S];
+  int _rng;
 };
 
 /// class for Modulo P operation
@@ -226,7 +223,7 @@ void prob()
     Mod num(0), den(0);
     for(int k=0; k<=s-r; k++)
     {
-      RngdSum rs;
+      RngdSum rs(r+k-1);
 
     }
 
