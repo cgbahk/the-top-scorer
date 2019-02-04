@@ -82,6 +82,7 @@ private:
   int _val;
 };
 
+// TODO change base of RngdSum type from int to Mod
 struct RngdSum
 {
   /// Initialize memo to -1, i.e. not visited(calculated)
