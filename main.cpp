@@ -68,7 +68,7 @@ struct RngdSum
     }
 
     int val = 0;
-    // this method has faster implementation by delete overlap
+    // TODO this method has faster implementation by delete overlap
     for(int k=0; k<=_rng && sum-k>=0; k++)
     {
       val += calc(len-1, sum-k);
